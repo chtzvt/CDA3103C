@@ -3,9 +3,43 @@
 
 /* ALU */
 /* 10 Points */
+//Alexander Cote	
 void ALU(unsigned A,unsigned B,char ALUControl,unsigned *ALUresult,char *Zero)
 {
 
+switch(ALUControl){
+
+	case 0:
+		*ALUresult=A+B;
+		if(ALUresult==0){
+			*Zero=1;
+		}
+		else{
+			*Zero=0;
+		}
+		break;
+	case 1:
+		*ALUresult=A-B;
+		if(ALUresult==0){
+			*Zero=1;
+		}
+		else{
+			*Zero=0;
+		}
+		break;
+	case 2:
+		*ALUresult=0>(A-B);
+		if(ALUresult==0){
+			*Zero=1;
+		}
+		else{
+			*Zero=0;
+		}
+		break;
+
+
+
+}
 }
 
 /* instruction fetch */
