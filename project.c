@@ -3,7 +3,7 @@
 
 /* ALU */
 /* 10 Points */
-//Alexander Cote	
+//Alexander Cote
 void ALU(unsigned A,unsigned B,char ALUControl,unsigned *ALUresult,char *Zero)
 {
 
@@ -11,7 +11,7 @@ switch(ALUControl){
 
 	case 0:
 		*ALUresult=A+B;
-		if(ALUresult==0){
+		if(*ALUresult==0){
 			*Zero=1;
 		}
 		else{
@@ -20,7 +20,7 @@ switch(ALUControl){
 		break;
 	case 1:
 		*ALUresult=A-B;
-		if(ALUresult==0){
+		if(*ALUresult==0){
 			*Zero=1;
 		}
 		else{
@@ -28,17 +28,61 @@ switch(ALUControl){
 		}
 		break;
 	case 2:
-		*ALUresult=0>(A-B);
-		if(ALUresult==0){
+		*ALUresult=A<B;
+		if(*ALUresult==0){
 			*Zero=1;
 		}
 		else{
 			*Zero=0;
 		}
 		break;
-
-
-
+	case 3:
+		*ALUresult=A<B;
+		if(*ALUresult==0){
+			*Zero=1;
+		}
+		else{
+			*Zero=0;
+		}
+		break;
+		break;
+	case 4:
+		*ALUresult=A&B;
+		if(*ALUresult==0){
+			*Zero=1;
+		}
+		else{
+			*Zero=0;
+		}
+		break;
+	case 5:
+		*ALUresult=A|B;
+		if(*ALUresult==0){
+			*Zero=1;
+		}
+		else{
+			*Zero=0;
+		}
+		break;
+	case 6:
+		*ALUresult=B<<16;
+		if(*ALUresult==0){
+			*Zero=1;
+		}
+		else{
+			*Zero=0;
+		}
+		break;
+	case 7:
+		*ALUresult=~A;
+		if(*ALUresult==0){
+			*Zero=1;
+		}
+		else{
+			*Zero=0;
+		}
+		break;
+	return;
 }
 }
 
@@ -110,3 +154,11 @@ void PC_update(unsigned jsec,unsigned extended_value,char Branch,char Jump,char 
 
 }
 
+int main(){
+	unsigned *r=malloc(sizeof(unsigned));
+	char *Zero=malloc(sizeof(char));
+	ALU(1,1,1,r,Zero);
+
+	return 1;
+
+}
