@@ -172,13 +172,17 @@ void write_register(unsigned r2, unsigned r3, unsigned memdata, unsigned ALUresu
 	{
 		if (MemtoReg == 1)
 		{
-			Reg[r2] = memdata;
-			Reg[r3] = memdata;
+			if(RegDst==0)
+				Reg[r2] = memdata;
+			else if(RegDst==1)
+				Reg[r3] = memdata;
 		}
 		else if (ALUresult == 1)
 		{
-			Reg[r2] = ALUresult;
-			Reg[r3] = ALUresult;
+			if(RegDst==0)
+				Reg[r2] = ALUresult;
+			else if(RegDst==1)
+				Reg[r3] = ALUresult;
 		}
 	}
 	else
@@ -191,7 +195,7 @@ void PC_update(unsigned jsec, unsigned extended_value, char Branch, char Jump, c
 {
 
 }
-
+/*
 int main()
 {
 	unsigned *r = malloc(sizeof(unsigned));
@@ -201,3 +205,4 @@ int main()
 	return 1;
 
 }
+ */
