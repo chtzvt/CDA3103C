@@ -12,96 +12,71 @@ void ALU(unsigned A, unsigned B, char ALUControl, unsigned *ALUresult, char *Zer
 
 		case 0:
 			*ALUresult = A + B;
-			if (*ALUresult == 0)
-			{
+			if (*ALUresult == 0)		
 				*Zero = 1;
-			}
 			else
-			{
 				*Zero = 0;
-			}
 			break;
+		
 		case 1:
 			*ALUresult = A - B;
 			if (*ALUresult == 0)
-			{
 				*Zero = 1;
-			}
 			else
-			{
 				*Zero = 0;
-			}
 			break;
+		
 		case 2:
 			*ALUresult = A < B;
 			if (*ALUresult == 0)
-			{
 				*Zero = 1;
-			}
 			else
-			{
 				*Zero = 0;
-			}
 			break;
+		
 		case 3:
 			*ALUresult = A < B;
 			if (*ALUresult == 0)
-			{
 				*Zero = 1;
-			}
 			else
-			{
 				*Zero = 0;
-			}
 			break;
-			break;
+		
 		case 4:
 			*ALUresult = A & B;
 			if (*ALUresult == 0)
-			{
 				*Zero = 1;
-			}
 			else
-			{
 				*Zero = 0;
-			}
 			break;
+		
 		case 5:
 			*ALUresult = A | B;
 			if (*ALUresult == 0)
-			{
 				*Zero = 1;
-			}
 			else
-			{
 				*Zero = 0;
-			}
 			break;
+		
 		case 6:
 			*ALUresult = B << 16;
 			if (*ALUresult == 0)
-			{
 				*Zero = 1;
-			}
 			else
-			{
 				*Zero = 0;
-			}
 			break;
+		
 		case 7:
 			*ALUresult = ~A;
 			if (*ALUresult == 0)
-			{
 				*Zero = 1;
-			}
 			else
-			{
 				*Zero = 0;
-			}
 			break;
-			return;
-	}
+	}		
+	return;
 }
+
 
 /* instruction fetch */
 /* 10 Points */
@@ -122,16 +97,154 @@ instruction_partition(unsigned instruction, unsigned *op, unsigned *r1, unsigned
 
 
 
-/* instruction decode */
+/* Instruction Decode */
 /* 15 Points */
-int instruction_decode(unsigned op, struct_controls *controls)
-{
+// Michael Ibeh
+int instruction_decode(unsigned op, struct_controls *controls){
+			/*typedef struct
+			{
+			char RegDst;  // 0 for I-Type that write to reg (addi, andi, ori, lw)
+			char Jump;	  // only 1 for jump instructions, 0 else
+			char Branch;  // 1 for beq, 0 else determines next PC
+			char MemRead; // 1 for lw, 0 else gives processor perm to read from memory
+			char MemtoReg;// 1 for lw, 0 for all R-type & I-type that write to register (0 - sends res from ALU to register, 1 - val from mem to register)
+			char ALUOp;   // 1 beq, 2 R-Type, 0 else
+			char MemWrite;// 1 for sw, 0 else gives processor perm to write to data mem
+			char ALUSrc;  // 0 for R-type and beq, 1 for addi, andi, ori, lw, sw
+			char RegWrite;// 1 for R-types, addi, andi, ori, lw, 0 else
+			}struct_controls;*/
 
+	// R-Type
+	if(op == 0){
+		controls->RegDst = 1;
+		controls->Jump = 0;
+		controls->Branch = 0;
+		controls->MemRead = 0;
+		controls->MemtoReg = 0;
+		controls->ALUOp = 2;
+		controls->MemWrite = 0;
+		controls->ALUSrc = 0;
+		controls->RegWrite = 1;
+
+		return 0;
+	}
+	
+	// J-Type
+	if(op == 2){
+		controls->RegDst = 0;
+		controls->Jump = 1;
+		controls->Branch = 0;
+		controls->MemRead = 0;
+		controls->MemtoReg = 0;
+		controls->ALUOp = 0;
+		controls->MemWrite = 0;
+		controls->ALUSrc = 0;
+		controls->RegWrite = 0;
+
+		return 0;
+	}
+
+	//I-Type
+	switch(op){
+
+		// addi
+		case 0b001000:
+			controls->RegDst = 0;
+			controls->Jump = 0;
+			controls->Branch = 0;
+			controls->MemRead = 0;
+			controls->MemtoReg = 0;
+			controls->ALUOp = 0;
+			controls->MemWrite = 0;
+			controls->ALUSrc = 1;
+			controls->RegWrite = 1;
+			break;
+
+		// lw
+		case 0b100011:
+			controls->RegDst = 0;
+			controls->Jump = 0;
+			controls->Branch = 0;
+			controls->MemRead = 1;
+			controls->MemtoReg = 1;
+			controls->ALUOp = 0;
+			controls->MemWrite = 0;
+			controls->ALUSrc = 1;
+			controls->RegWrite = 1;
+			break;
+
+		// sw
+		case 0b101011:
+			controls->RegDst = 1;
+			controls->Jump = 0;
+			controls->Branch = 0;
+			controls->MemRead = 0;
+			controls->MemtoReg = 0;
+			controls->ALUOp = 0;
+			controls->MemWrite = 1;
+			controls->ALUSrc = 1;
+			controls->RegWrite = 0;
+			break;
+
+		// lui
+		case 0b001111:
+			controls->RegDst = 1;
+			controls->Jump = 0;
+			controls->Branch = 0;
+			controls->MemRead = 0;
+			controls->MemtoReg = 0;
+			controls->ALUOp = 0;
+			controls->MemWrite = 0;
+			controls->ALUSrc = 0;
+			controls->RegWrite = 0;
+			break;
+
+		// slti
+		case 0b001010:
+			controls->RegDst = 1;
+			controls->Jump = 0;
+			controls->Branch = 0;
+			controls->MemRead = 0;
+			controls->MemtoReg = 0;
+			controls->ALUOp = 0;
+			controls->MemWrite = 0;
+			controls->ALUSrc = 0;
+			controls->RegWrite = 0;
+			break;
+
+		// sltiu
+		case 0b001011:
+			controls->RegDst = 1;
+			controls->Jump = 0;
+			controls->Branch = 0;
+			controls->MemRead = 0;
+			controls->MemtoReg = 0;
+			controls->ALUOp = 0;
+			controls->MemWrite = 0;
+			controls->ALUSrc = 1;
+			controls->RegWrite = 1;
+			break;
+				
+		// beq
+		case 0b000100:
+			controls->RegDst = 1;
+			controls->Jump = 0;
+			controls->Branch = 1;
+			controls->MemRead = 0;
+			controls->MemtoReg = 0;
+			controls->ALUOp = 1;
+			controls->MemWrite = 0;
+			controls->ALUSrc = 0;
+			controls->RegWrite = 0;
+			break;
+	}
+
+	return 0;
 }
 
 /* Read Register */
 /* 5 Points */
-//Alexander Cote
+// Alexander Cote
 void read_register(unsigned r1, unsigned r2, unsigned *Reg, unsigned *data1, unsigned *data2)
 {
 	*data1 = Reg[r1];
@@ -164,7 +277,7 @@ int rw_memory(unsigned ALUresult, unsigned data2, char MemWrite, char MemRead, u
 
 /* Write Register */
 /* 10 Points */
-//Alexander Cote
+// Alexander Cote
 void write_register(unsigned r2, unsigned r3, unsigned memdata, unsigned ALUresult, char RegWrite, char RegDst,
 					char MemtoReg, unsigned *Reg)
 {
@@ -189,7 +302,7 @@ void write_register(unsigned r2, unsigned r3, unsigned memdata, unsigned ALUresu
 		return;
 }
 
-/* PC update */
+/* PC Update */
 /* 10 Points */
 void PC_update(unsigned jsec, unsigned extended_value, char Branch, char Jump, char Zero, unsigned *PC)
 {
