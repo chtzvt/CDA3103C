@@ -304,9 +304,28 @@ void write_register(unsigned r2, unsigned r3, unsigned memdata, unsigned ALUresu
 
 /* PC Update */
 /* 10 Points */
-void PC_update(unsigned jsec, unsigned extended_value, char Branch, char Jump, char Zero, unsigned *PC)
-{
+// Michael Ibeh
+void PC_update(unsigned jsec, unsigned extended_value, char Branch, char Jump, char Zero, unsigned *PC){
 
+		unsigned new = 0;
+
+		// beq
+		if(Branch == 1){
+			new = PC + (jsec * 4);
+			*PC = new;
+			return;
+		}
+		
+		// j
+		if(Jump == 1){
+			*PC = jsec * 4;
+			return;
+		}
+		
+		// next sequential instruction
+		*PC += 4;
+
+		return;
 }
 /*
 int main()
@@ -315,7 +334,6 @@ int main()
 	char *Zero = malloc(sizeof(char));
 	ALU(1, 1, 1, r, Zero);
 
-	return 1;
-
+	return 0;
 }
  */
