@@ -269,7 +269,26 @@ void sign_extend(unsigned offset, unsigned *extended_value)
 int ALU_operations(unsigned data1, unsigned data2, unsigned extended_value, unsigned funct, char ALUOp, char ALUSrc,
 				   unsigned *ALUresult, char *Zero)
 {
+	unsigned a,b;
+	if(ALUOp!=0)
+	{
+		switch (ALUOp)
+		{
+			case 1:
 
+				break;
+
+
+		}
+	}
+else{
+	switch (funct){
+
+
+
+	}
+
+}
 }
 
 /* Read / Write Memory */
