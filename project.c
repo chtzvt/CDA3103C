@@ -1,5 +1,5 @@
 #include "spimcore.h"
-
+#include <stdint.h>
 
 /* ALU */
 /* 10 Points */
@@ -254,9 +254,10 @@ void read_register(unsigned r1, unsigned r2, unsigned *Reg, unsigned *data1, uns
 
 /* Sign Extend */
 /* 10 Points */
+// Charlton Trezevant
 void sign_extend(unsigned offset, unsigned *extended_value)
 {
-
+	*extended_value = (int32_t)offset;
 }
 
 /* ALU operations */
