@@ -53,3 +53,7 @@ dkms.conf
 /CMakeLists.txt
 /cmake-build-debug/
 .idea
+
+# Immutable project files (should never be modified)
+spimcore.c
+spimcore.h
