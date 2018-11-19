@@ -269,8 +269,26 @@ int ALU_operations(unsigned data1, unsigned data2, unsigned extended_value, unsi
 
 /* Read / Write Memory */
 /* 10 Points */
-int rw_memory(unsigned ALUresult, unsigned data2, char MemWrite, char MemRead, unsigned *memdata, unsigned *Mem)
-{
+// Michael Ibeh
+int rw_memory(unsigned ALUresult, unsigned data2, char MemWrite, char MemRead, unsigned *memdata, unsigned *Mem){
+
+	// Address not word aligned
+	if(ALUresult % 4 != 0)
+		return 1;
+	// Adress out of bounds
+	if(ALUresult > 0xFFFF || ALUresult < 0x4000)
+		return 1;
+	
+	// Writing to memory
+	if(MemWrite == 1){
+		Mem[ALUresult] = data2;
+		return 0;
+	}
+	// Reading from memory
+	if( MemRead == 1){
+		memdata = Mem[ALUresult] 
+		return 0;
+	}
 
 }
 
