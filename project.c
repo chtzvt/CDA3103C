@@ -237,6 +237,10 @@ int instruction_decode(unsigned op, struct_controls *controls){
 			controls->ALUSrc = 0;
 			controls->RegWrite = 0;
 			break;
+		
+		// Invalid Instruction
+		default:
+			return 1;
 	}
 
 	return 0;
@@ -287,7 +291,7 @@ int rw_memory(unsigned ALUresult, unsigned data2, char MemWrite, char MemRead, u
 	}
 	// Reading from memory
 	if( MemRead == 1){
-		memdata = Mem[ALUresult] 
+		*memdata = Mem[ALUresult]; 
 		return 0;
 	}
 
@@ -330,7 +334,7 @@ void PC_update(unsigned jsec, unsigned extended_value, char Branch, char Jump, c
 
 		// beq
 		if(Branch == 1){
-			new = PC + (jsec * 4);
+			new = *PC + (jsec * 4);
 			*PC = new;
 			return;
 		}
@@ -355,4 +359,5 @@ int main()
 
 	return 0;
 }
- */
+ 
+*/
