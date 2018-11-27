@@ -1,6 +1,7 @@
 #include "spimcore.h"
 #include <stdint.h>
-
+#include <limits.h>
+#define ERR INT_MIN
 /* ALU */
 /* 10 Points */
 //Alexander Cote
@@ -269,24 +270,67 @@ void sign_extend(unsigned offset, unsigned *extended_value)
 int ALU_operations(unsigned data1, unsigned data2, unsigned extended_value, unsigned funct, char ALUOp, char ALUSrc,
 				   unsigned *ALUresult, char *Zero)
 {
-	unsigned a,b;
-	if(ALUOp!=0)
+	// R type
+	if(ALUOp==7)
 	{
-		switch (ALUOp)
+		switch (funct)
 		{
-			case 1:
-
+			case 32:
+				ALU(data1, data2, 0, ALUresult, Zero);
+				//addition
 				break;
-
-
+			case 34:
+				ALU(data1, data2, 1, ALUresult, Zero);
+				//subtraction
+				break;
+			case 42:
+				ALU(data1, data2, 2, ALUresult, Zero);
+				//set less then
+				break;
+			case 43:
+				ALU(data1, data2, 3, ALUresult, Zero);
+				// slt unsin
+				break;
+			case 36:
+				ALU(data1, data2, 4, ALUresult, Zero);
+				// AND
+				break;
+			case 37:
+				ALU(data1, data2, 5, ALUresult, Zero);
+				//OR
+				break;
+			default:
+				return 1;
 		}
+		return 0;
 	}
-else{
-	switch (funct){
-
-
+	else
+	switch(ALUOp)
+	{
+		case 0:
+			ALU(data1,extended_value,0,ALUresult,Zero);
+			//lw sw addi
+		break;
+		case 1:
+			ALU(data1,extended_value,1,ALUresult,Zero); //beq
+		case 2:
+			ALU(data1,extended_value,2,ALUresult,Zero);
+			//set less immediate
+			break;
+		case 3:
+			ALU(data1,extended_value,3,ALUresult,Zero);
+			//set less immediate Unsigned
+			break;
+		case 6:
+			ALU(data1,extended_value,6,ALUresult,Zero);
+			// load upper i
+			break;
+		default:
+			return 1;
 
 	}
+	return 0;
+
 
 }
 }
