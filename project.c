@@ -1,6 +1,7 @@
 #include "spimcore.h"
 #include <stdint.h>
 #include <limits.h>
+
 #define ERR INT_MIN
 /* ALU */
 /* 10 Points */
@@ -13,12 +14,12 @@ void ALU(unsigned A, unsigned B, char ALUControl, unsigned *ALUresult, char *Zer
 
 		case 0:
 			*ALUresult = A + B;
-			if (*ALUresult == 0)		
+			if (*ALUresult == 0)
 				*Zero = 1;
 			else
 				*Zero = 0;
 			break;
-		
+
 		case 1:
 			*ALUresult = A - B;
 			if (*ALUresult == 0)
@@ -26,7 +27,7 @@ void ALU(unsigned A, unsigned B, char ALUControl, unsigned *ALUresult, char *Zer
 			else
 				*Zero = 0;
 			break;
-		
+
 		case 2:
 			*ALUresult = A < B;
 			if (*ALUresult == 0)
@@ -34,7 +35,7 @@ void ALU(unsigned A, unsigned B, char ALUControl, unsigned *ALUresult, char *Zer
 			else
 				*Zero = 0;
 			break;
-		
+
 		case 3:
 			*ALUresult = A < B;
 			if (*ALUresult == 0)
@@ -42,7 +43,7 @@ void ALU(unsigned A, unsigned B, char ALUControl, unsigned *ALUresult, char *Zer
 			else
 				*Zero = 0;
 			break;
-		
+
 		case 4:
 			*ALUresult = A & B;
 			if (*ALUresult == 0)
@@ -50,7 +51,7 @@ void ALU(unsigned A, unsigned B, char ALUControl, unsigned *ALUresult, char *Zer
 			else
 				*Zero = 0;
 			break;
-		
+
 		case 5:
 			*ALUresult = A | B;
 			if (*ALUresult == 0)
@@ -58,7 +59,7 @@ void ALU(unsigned A, unsigned B, char ALUControl, unsigned *ALUresult, char *Zer
 			else
 				*Zero = 0;
 			break;
-		
+
 		case 6:
 			*ALUresult = B << 16;
 			if (*ALUresult == 0)
@@ -66,7 +67,7 @@ void ALU(unsigned A, unsigned B, char ALUControl, unsigned *ALUresult, char *Zer
 			else
 				*Zero = 0;
 			break;
-		
+
 		case 7:
 			*ALUresult = ~A;
 			if (*ALUresult == 0)
@@ -74,7 +75,7 @@ void ALU(unsigned A, unsigned B, char ALUControl, unsigned *ALUresult, char *Zer
 			else
 				*Zero = 0;
 			break;
-	}		
+	}
 	return;
 }
 
@@ -101,22 +102,24 @@ instruction_partition(unsigned instruction, unsigned *op, unsigned *r1, unsigned
 /* Instruction Decode */
 /* 15 Points */
 // Michael Ibeh
-int instruction_decode(unsigned op, struct_controls *controls){
-			/*typedef struct
-			{
-			char RegDst;  // 0 for I-Type that write to reg (addi, andi, ori, lw)
-			char Jump;	  // only 1 for jump instructions, 0 else
-			char Branch;  // 1 for beq, 0 else determines next PC
-			char MemRead; // 1 for lw, 0 else gives processor perm to read from memory
-			char MemtoReg;// 1 for lw, 0 for all R-type & I-type that write to register (0 - sends res from ALU to register, 1 - val from mem to register)
-			char ALUOp;   // 1 beq, 2 R-Type, 0 else
-			char MemWrite;// 1 for sw, 0 else gives processor perm to write to data mem
-			char ALUSrc;  // 0 for R-type and beq, 1 for addi, andi, ori, lw, sw
-			char RegWrite;// 1 for R-types, addi, andi, ori, lw, 0 else
-			}struct_controls;*/
+int instruction_decode(unsigned op, struct_controls *controls)
+{
+	/*typedef struct
+	{
+	char RegDst;  // 0 for I-Type that write to reg (addi, andi, ori, lw)
+	char Jump;	  // only 1 for jump instructions, 0 else
+	char Branch;  // 1 for beq, 0 else determines next PC
+	char MemRead; // 1 for lw, 0 else gives processor perm to read from memory
+	char MemtoReg;// 1 for lw, 0 for all R-type & I-type that write to register (0 - sends res from ALU to register, 1 - val from mem to register)
+	char ALUOp;   // 1 beq, 2 R-Type, 0 else
+	char MemWrite;// 1 for sw, 0 else gives processor perm to write to data mem
+	char ALUSrc;  // 0 for R-type and beq, 1 for addi, andi, ori, lw, sw
+	char RegWrite;// 1 for R-types, addi, andi, ori, lw, 0 else
+	}struct_controls;*/
 
 	// R-Type
-	if(op == 0){
+	if (op == 0)
+	{
 		controls->RegDst = 1;
 		controls->Jump = 0;
 		controls->Branch = 0;
@@ -129,9 +132,10 @@ int instruction_decode(unsigned op, struct_controls *controls){
 
 		return 0;
 	}
-	
+
 	// J-Type
-	if(op == 2){
+	if (op == 2)
+	{
 		controls->RegDst = 0;
 		controls->Jump = 1;
 		controls->Branch = 0;
@@ -146,7 +150,8 @@ int instruction_decode(unsigned op, struct_controls *controls){
 	}
 
 	//I-Type
-	switch(op){
+	switch (op)
+	{
 
 		// addi
 		case 0b001000:
@@ -161,7 +166,7 @@ int instruction_decode(unsigned op, struct_controls *controls){
 			controls->RegWrite = 1;
 			break;
 
-		// lw
+			// lw
 		case 0b100011:
 			controls->RegDst = 0;
 			controls->Jump = 0;
@@ -174,7 +179,7 @@ int instruction_decode(unsigned op, struct_controls *controls){
 			controls->RegWrite = 1;
 			break;
 
-		// sw
+			// sw
 		case 0b101011:
 			controls->RegDst = 1;
 			controls->Jump = 0;
@@ -187,7 +192,7 @@ int instruction_decode(unsigned op, struct_controls *controls){
 			controls->RegWrite = 0;
 			break;
 
-		// lui
+			// lui
 		case 0b001111:
 			controls->RegDst = 1;
 			controls->Jump = 0;
@@ -200,7 +205,7 @@ int instruction_decode(unsigned op, struct_controls *controls){
 			controls->RegWrite = 0;
 			break;
 
-		// slti
+			// slti
 		case 0b001010:
 			controls->RegDst = 1;
 			controls->Jump = 0;
@@ -213,7 +218,7 @@ int instruction_decode(unsigned op, struct_controls *controls){
 			controls->RegWrite = 0;
 			break;
 
-		// sltiu
+			// sltiu
 		case 0b001011:
 			controls->RegDst = 1;
 			controls->Jump = 0;
@@ -225,8 +230,8 @@ int instruction_decode(unsigned op, struct_controls *controls){
 			controls->ALUSrc = 1;
 			controls->RegWrite = 1;
 			break;
-				
-		// beq
+
+			// beq
 		case 0b000100:
 			controls->RegDst = 1;
 			controls->Jump = 0;
@@ -238,8 +243,8 @@ int instruction_decode(unsigned op, struct_controls *controls){
 			controls->ALUSrc = 0;
 			controls->RegWrite = 0;
 			break;
-		
-		// Invalid Instruction
+
+			// Invalid Instruction
 		default:
 			return 1;
 	}
@@ -262,7 +267,7 @@ void read_register(unsigned r1, unsigned r2, unsigned *Reg, unsigned *data1, uns
 // Charlton Trezevant
 void sign_extend(unsigned offset, unsigned *extended_value)
 {
-	*extended_value = (int32_t)offset;
+	*extended_value = (int32_t) offset;
 }
 
 /* ALU operations */
@@ -271,7 +276,7 @@ int ALU_operations(unsigned data1, unsigned data2, unsigned extended_value, unsi
 				   unsigned *ALUresult, char *Zero)
 {
 	// R type
-	if(ALUOp==7)
+	if (ALUOp == 7)
 	{
 		switch (funct)
 		{
@@ -305,29 +310,31 @@ int ALU_operations(unsigned data1, unsigned data2, unsigned extended_value, unsi
 		return 0;
 	}
 	else
-	switch(ALUOp)
 	{
-		case 0:
-			ALU(data1,extended_value,0,ALUresult,Zero);
-			//lw sw addi
-		break;
-		case 1:
-			ALU(data1,extended_value,1,ALUresult,Zero); //beq
-		case 2:
-			ALU(data1,extended_value,2,ALUresult,Zero);
-			//set less immediate
-			break;
-		case 3:
-			ALU(data1,extended_value,3,ALUresult,Zero);
-			//set less immediate Unsigned
-			break;
-		case 6:
-			ALU(data1,extended_value,6,ALUresult,Zero);
-			// load upper i
-			break;
-		default:
-			return 1;
+		switch (ALUOp)
+		{
+			case 0:
+				ALU(data1, extended_value, 0, ALUresult, Zero);
+				//lw sw addi
+				break;
+			case 1:
+				ALU(data1, extended_value, 1, ALUresult, Zero); //beq
+			case 2:
+				ALU(data1, extended_value, 2, ALUresult, Zero);
+				//set less immediate
+				break;
+			case 3:
+				ALU(data1, extended_value, 3, ALUresult, Zero);
+				//set less immediate Unsigned
+				break;
+			case 6:
+				ALU(data1, extended_value, 6, ALUresult, Zero);
+				// load upper i
+				break;
+			default:
+				return 1;
 
+		}
 	}
 	return 0;
 
@@ -338,23 +345,26 @@ int ALU_operations(unsigned data1, unsigned data2, unsigned extended_value, unsi
 /* Read / Write Memory */
 /* 10 Points */
 // Michael Ibeh
-int rw_memory(unsigned ALUresult, unsigned data2, char MemWrite, char MemRead, unsigned *memdata, unsigned *Mem){
+int rw_memory(unsigned ALUresult, unsigned data2, char MemWrite, char MemRead, unsigned *memdata, unsigned *Mem)
+{
 
 	// Address not word aligned
-	if(ALUresult % 4 != 0)
+	if (ALUresult % 4 != 0)
 		return 1;
 	// Adress out of bounds
-	if(ALUresult > 0xFFFF || ALUresult < 0x4000)
+	if (ALUresult > 0xFFFF || ALUresult < 0x4000)
 		return 1;
-	
+
 	// Writing to memory
-	if(MemWrite == 1){
+	if (MemWrite == 1)
+	{
 		Mem[ALUresult] = data2;
 		return 0;
 	}
 	// Reading from memory
-	if( MemRead == 1){
-		*memdata = Mem[ALUresult]; 
+	if (MemRead == 1)
+	{
+		*memdata = Mem[ALUresult];
 		return 0;
 	}
 
@@ -371,16 +381,16 @@ void write_register(unsigned r2, unsigned r3, unsigned memdata, unsigned ALUresu
 	{
 		if (MemtoReg == 1)
 		{
-			if(RegDst==0)
+			if (RegDst == 0)
 				Reg[r2] = memdata;
-			else if(RegDst==1)
+			else if (RegDst == 1)
 				Reg[r3] = memdata;
 		}
 		else if (ALUresult == 1)
 		{
-			if(RegDst==0)
+			if (RegDst == 0)
 				Reg[r2] = ALUresult;
-			else if(RegDst==1)
+			else if (RegDst == 1)
 				Reg[r3] = ALUresult;
 		}
 	}
@@ -391,27 +401,30 @@ void write_register(unsigned r2, unsigned r3, unsigned memdata, unsigned ALUresu
 /* PC Update */
 /* 10 Points */
 // Michael Ibeh
-void PC_update(unsigned jsec, unsigned extended_value, char Branch, char Jump, char Zero, unsigned *PC){
+void PC_update(unsigned jsec, unsigned extended_value, char Branch, char Jump, char Zero, unsigned *PC)
+{
 
-		unsigned new = 0;
+	unsigned new = 0;
 
-		// beq
-		if(Branch == 1){
-			new = *PC + (jsec * 4);
-			*PC = new;
-			return;
-		}
-		
-		// j
-		if(Jump == 1){
-			*PC = jsec * 4;
-			return;
-		}
-		
-		// next sequential instruction
-		*PC += 4;
-
+	// beq
+	if (Branch == 1)
+	{
+		new = *PC + (jsec * 4);
+		*PC = new;
 		return;
+	}
+
+	// j
+	if (Jump == 1)
+	{
+		*PC = jsec * 4;
+		return;
+	}
+
+	// next sequential instruction
+	*PC += 4;
+
+	return;
 }
 /*
 int main()
