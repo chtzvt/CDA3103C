@@ -311,6 +311,10 @@ int ALU_operations(unsigned data1, unsigned data2, unsigned extended_value, unsi
 	}
 	else
 	{
+		if(ALUSrc==0)
+		{
+			extended_value=data2;
+		}
 		switch (ALUOp)
 		{
 			case 0:
@@ -340,7 +344,7 @@ int ALU_operations(unsigned data1, unsigned data2, unsigned extended_value, unsi
 
 
 }
-}
+
 
 /* Read / Write Memory */
 /* 10 Points */
