@@ -1,5 +1,4 @@
 #include "spimcore.h"
-#include <stdint.h>
 #include <limits.h>
 
 #define ERR INT_MIN
@@ -276,7 +275,11 @@ void read_register(unsigned r1, unsigned r2, unsigned *Reg, unsigned *data1, uns
 // Charlton Trezevant
 void sign_extend(unsigned offset, unsigned *extended_value)
 {
-	*extended_value = (int32_t) offset;
+	int sign = offset & 0x00008000;
+	if (sign > 1)
+					*extended_value = offset | 0xffff0000;
+	else if (sign == 0)
+					*extended_value = offset;
 }
 
 /* ALU operations */
