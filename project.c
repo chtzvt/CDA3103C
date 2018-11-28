@@ -86,7 +86,10 @@ int instruction_fetch(unsigned PC, unsigned *Mem, unsigned *instruction)
 	if(PC % 4 != 0)
 		return 1; // Halt condition! That address ain't aligned.
 	
-	*instruction = Mem[PC*4];
+	if(PC > 65535 || PC < 0)
+		return 1;
+	
+	*instruction = Mem[PC / 4];
 	
 	return 0;
 }
