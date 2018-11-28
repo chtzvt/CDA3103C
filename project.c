@@ -429,26 +429,6 @@ void PC_update(unsigned jsec, unsigned extended_value, char Branch, char Jump, c
 		// next sequential instruction
 		*PC += 4;
 
-	unsigned new = 0;
-
-	// beq
-	if (Branch == 1)
-	{
-		new = *PC + (jsec * 4);
-		*PC = new;
-		return;
-	}
-
-	// j
-	if (Jump == 1)
-	{
-		*PC = jsec * 4;
-		return;
-	}
-
-	// next sequential instruction
-	*PC += 4;
-
 	return;
 }
 /*
