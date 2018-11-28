@@ -330,18 +330,21 @@ void write_register(unsigned r2, unsigned r3, unsigned memdata, unsigned ALUresu
 // Michael Ibeh
 void PC_update(unsigned jsec, unsigned extended_value, char Branch, char Jump, char Zero, unsigned *PC){
 
-		unsigned new = 0;
+		unsigned shift, upperFour;
 
 		// beq
 		if(Branch == 1){
 			new = *PC + (jsec * 4);
 			*PC = new;
+			*PC += 4;
 			return;
 		}
 		
 		// j
 		if(Jump == 1){
-			*PC = jsec * 4;
+			shift = jsec << 2;
+			upperFour = (*PC + 4) & 0xF0000000;
+			*PC = shift | upperFour;
 			return;
 		}
 		
