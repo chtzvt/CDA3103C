@@ -80,9 +80,15 @@ void ALU(unsigned A, unsigned B, char ALUControl, unsigned *ALUresult, char *Zer
 
 /* instruction fetch */
 /* 10 Points */
+// Charlton Trezevant
 int instruction_fetch(unsigned PC, unsigned *Mem, unsigned *instruction)
 {
-
+	if(PC % 4 != 0)
+		return 1; // Halt condition! That address ain't aligned.
+	
+	*instruction = Mem[PC*4];
+	
+	return 0;
 }
 
 
