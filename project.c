@@ -408,6 +408,28 @@ void write_register(unsigned r2, unsigned r3, unsigned memdata, unsigned ALUresu
 void PC_update(unsigned jsec, unsigned extended_value, char Branch, char Jump, char Zero, unsigned *PC)
 {
 
+<<<<<<< HEAD
+		unsigned shift, upperFour;
+
+		// beq
+		if(Branch == 1){
+			new = *PC + (jsec * 4);
+			*PC = new;
+			*PC += 4;
+			return;
+		}
+		
+		// j
+		if(Jump == 1){
+			shift = jsec << 2;
+			upperFour = (*PC + 4) & 0xF0000000;
+			*PC = shift | upperFour;
+			return;
+		}
+		
+		// next sequential instruction
+		*PC += 4;
+=======
 	unsigned new = 0;
 
 	// beq
@@ -417,6 +439,7 @@ void PC_update(unsigned jsec, unsigned extended_value, char Branch, char Jump, c
 		*PC = new;
 		return;
 	}
+>>>>>>> 97b81f3fa5788e589174e8636814787de481932f
 
 	// j
 	if (Jump == 1)
