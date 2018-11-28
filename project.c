@@ -394,27 +394,38 @@ void write_register(unsigned r2, unsigned r3, unsigned memdata, unsigned ALUresu
 					char MemtoReg, unsigned *Reg)
 {
 	//memory is byte addressed
-	if (RegDst==0&&r2==0){
-		return;
-	}
-	if (RegDst==0&&r3==0){
-		return;
-	}
 	if (RegWrite == 1)
 	{
 		if (MemtoReg == 1)
 		{
-			if (RegDst == 0)
+			if (RegDst == 0) {
+				if(r2==0){
+					return;
+				}
 				Reg[r2] = memdata;
-			else if (RegDst == 1)
+			}
+			else if (RegDst == 1){
+				if(r3==0){
+					return;
+				}
 				Reg[r3] = memdata;
+			}
+
 		}
-		else if (ALUresult == 1)
+		else
 		{
-			if (RegDst == 0)
+			if (RegDst == 0) {
+				if(r2==0){
+					return;
+				}
 				Reg[r2] = ALUresult;
-			else if (RegDst == 1)
+			}
+			else if (RegDst == 1) {
+				if(r3==0){
+					return;
+				}
 				Reg[r3] = ALUresult;
+			}
 		}
 	}
 	else
@@ -435,7 +446,7 @@ void PC_update(unsigned jsec, unsigned extended_value, char Branch, char Jump, c
 			*PC += 4;
 			return;
 		}
-		
+
 		// j
 		if(Jump == 1){
 			shift = jsec << 2;
@@ -443,7 +454,7 @@ void PC_update(unsigned jsec, unsigned extended_value, char Branch, char Jump, c
 			*PC = shift | upperFour;
 			return;
 		}
-		
+
 		// next sequential instruction
 		*PC += 4;
 
