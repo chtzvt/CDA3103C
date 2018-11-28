@@ -381,6 +381,13 @@ int rw_memory(unsigned ALUresult, unsigned data2, char MemWrite, char MemRead, u
 void write_register(unsigned r2, unsigned r3, unsigned memdata, unsigned ALUresult, char RegWrite, char RegDst,
 					char MemtoReg, unsigned *Reg)
 {
+	//memory is byte addressed
+	if (RegDst==0&&r2==0){
+		return;
+	}
+	if (RegDst==0&&r3==0){
+		return;
+	}
 	if (RegWrite == 1)
 	{
 		if (MemtoReg == 1)
