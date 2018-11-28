@@ -344,7 +344,7 @@ int ALU_operations(unsigned data1, unsigned data2, unsigned extended_value, unsi
 
 
 }
-}
+
 
 /* Read / Write Memory */
 /* 10 Points */
