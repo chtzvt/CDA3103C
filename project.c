@@ -407,8 +407,6 @@ void write_register(unsigned r2, unsigned r3, unsigned memdata, unsigned ALUresu
 // Michael Ibeh
 void PC_update(unsigned jsec, unsigned extended_value, char Branch, char Jump, char Zero, unsigned *PC)
 {
-
-<<<<<<< HEAD
 		unsigned shift, upperFour;
 
 		// beq
@@ -429,29 +427,8 @@ void PC_update(unsigned jsec, unsigned extended_value, char Branch, char Jump, c
 		
 		// next sequential instruction
 		*PC += 4;
-=======
-	unsigned new = 0;
 
-	// beq
-	if (Branch == 1)
-	{
-		new = *PC + (jsec * 4);
-		*PC = new;
-		return;
-	}
->>>>>>> 97b81f3fa5788e589174e8636814787de481932f
-
-	// j
-	if (Jump == 1)
-	{
-		*PC = jsec * 4;
-		return;
-	}
-
-	// next sequential instruction
-	*PC += 4;
-
-	return;
+  return;
 }
 /*
 int main()
