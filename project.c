@@ -363,7 +363,7 @@ int ALU_operations(unsigned data1, unsigned data2, unsigned extended_value, unsi
 // Michael Ibeh
 int rw_memory(unsigned ALUresult, unsigned data2, char MemWrite, char MemRead, unsigned *memdata, unsigned *Mem)
 {
-
+	
 	// Address not word aligned
 	if (ALUresult % 4 != 0)
 		return 1;
@@ -373,17 +373,13 @@ int rw_memory(unsigned ALUresult, unsigned data2, char MemWrite, char MemRead, u
 
 	// Writing to memory
 	if (MemWrite == 1)
-	{
-		Mem[ALUresult] = data2;
-		return 0;
-	}
+		Mem[ALUresult >> 2] = data2;
+		
 	// Reading from memory
 	if (MemRead == 1)
-	{
-		*memdata = Mem[ALUresult];
-		return 0;
-	}
-
+		*memdata = Mem[ALUresult >> 2];
+		
+	return 0;
 }
 
 
