@@ -98,6 +98,7 @@ int instruction_fetch(unsigned PC, unsigned *Mem, unsigned *instruction)
 
 /* instruction partition */
 /* 10 Points */
+/*
 void
 instruction_partition(unsigned instruction, unsigned *op, unsigned *r1, unsigned *r2, unsigned *r3, unsigned *funct,
 					  unsigned *offset, unsigned *jsec)
@@ -105,7 +106,7 @@ instruction_partition(unsigned instruction, unsigned *op, unsigned *r1, unsigned
 
 }
 
-
+*/
 
 /* Instruction Decode */
 /* 15 Points */
@@ -365,22 +366,29 @@ int rw_memory(unsigned ALUresult, unsigned data2, char MemWrite, char MemRead, u
 {
 
 	// Address not word aligned
-	if (ALUresult % 4 != 0)
-		return 1;
-	// Adress out of bounds
-	if (ALUresult > 0xFFFF || ALUresult < 0x4000)
-		return 1;
 
 	// Writing to memory
 	if (MemWrite == 1)
 	{
-		Mem[ALUresult] = data2;
+        if (ALUresult % 4 != 0)
+            return 1;
+        // Adress out of bounds
+        if (ALUresult > 0xFFFF || ALUresult < 0x4000)
+            return 1;
+
+        Mem[ALUresult] = data2;
 		return 0;
 	}
 	// Reading from memory
 	if (MemRead == 1)
 	{
-		*memdata = Mem[ALUresult];
+        if (ALUresult % 4 != 0)
+            return 1;
+        // Adress out of bounds
+        if (ALUresult > 0xFFFF || ALUresult < 0x4000)
+            return 1;
+
+        *memdata = Mem[ALUresult];
 		return 0;
 	}
 
