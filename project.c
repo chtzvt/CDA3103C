@@ -118,7 +118,7 @@ instruction_partition(unsigned instruction, unsigned *op, unsigned *r1, unsigned
 	// Bit range:    31-26                                 25-0
 	// Labels:    | opcode |                     target address (26 bits)                        |
 
-  // FIELD SIZES (in bits): | 6 | 5 | 5 | 5 | 5 | 6 |
+ 	// FIELD SIZES (in bits): | 6 | 5 | 5 | 5 | 5 | 6 |
 	
 	// For each field, we AND instruction with the appropriate bitmask for
 	// each field, then shift right the appropriate number of bits to get the
@@ -176,7 +176,7 @@ int instruction_decode(unsigned op, struct_controls *controls)
 	}
 
 	// J-Type
-	if (op == 2)
+	if (op == 0x08000000)
 	{
 		controls->RegDst = 0;
 		controls->Jump = 1;
@@ -196,7 +196,7 @@ int instruction_decode(unsigned op, struct_controls *controls)
 	{
 
 		// addi
-		case 0b001000:
+		case 0x20000000:
 			controls->RegDst = 0;
 			controls->Jump = 0;
 			controls->Branch = 0;
@@ -209,7 +209,7 @@ int instruction_decode(unsigned op, struct_controls *controls)
 			break;
 
 			// lw
-		case 0b100011:
+		case 0x8c000000:
 			controls->RegDst = 0;
 			controls->Jump = 0;
 			controls->Branch = 0;
@@ -222,8 +222,8 @@ int instruction_decode(unsigned op, struct_controls *controls)
 			break;
 
 			// sw
-		case 0b101011:
-			controls->RegDst = 1;
+		case 0xac000000:
+			controls->RegDst = 0; //0
 			controls->Jump = 0;
 			controls->Branch = 0;
 			controls->MemRead = 0;
@@ -235,7 +235,7 @@ int instruction_decode(unsigned op, struct_controls *controls)
 			break;
 
 			// lui
-		case 0b001111:
+		case 0x3c000000:
 			controls->RegDst = 0;
 			controls->Jump = 0;
 			controls->Branch = 0;
@@ -248,34 +248,34 @@ int instruction_decode(unsigned op, struct_controls *controls)
 			break;
 
 			// slti
-		case 0b001010:
-			controls->RegDst = 1;
+		case 0x28000000:
+			controls->RegDst = 0; //0
 			controls->Jump = 0;
 			controls->Branch = 0;
 			controls->MemRead = 0;
 			controls->MemtoReg = 0;
-			controls->ALUOp = 0;
+			controls->ALUOp = 2; 
 			controls->MemWrite = 0;
-			controls->ALUSrc = 0;
-			controls->RegWrite = 0;
+			controls->ALUSrc = 1; // 1
+			controls->RegWrite = 1; // 1
 			break;
 
 			// sltiu
-		case 0b001011:
-			controls->RegDst = 1;
+		case 0x2c000000:
+			controls->RegDst = 0; // 0
 			controls->Jump = 0;
 			controls->Branch = 0;
 			controls->MemRead = 0;
 			controls->MemtoReg = 0;
-			controls->ALUOp = 0;
+			controls->ALUOp = 3; 
 			controls->MemWrite = 0;
 			controls->ALUSrc = 1;
 			controls->RegWrite = 1;
 			break;
 
 			// beq
-		case 0b000100:
-			controls->RegDst = 1;
+		case 0x10000000:
+			controls->RegDst = 0; //0
 			controls->Jump = 0;
 			controls->Branch = 1;
 			controls->MemRead = 0;
