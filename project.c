@@ -223,7 +223,7 @@ int instruction_decode(unsigned op, struct_controls *controls)
 
 			// sw
 		case 0b101011:
-			controls->RegDst = 1;
+			controls->RegDst = 1; //0
 			controls->Jump = 0;
 			controls->Branch = 0;
 			controls->MemRead = 0;
@@ -249,25 +249,25 @@ int instruction_decode(unsigned op, struct_controls *controls)
 
 			// slti
 		case 0b001010:
-			controls->RegDst = 1;
+			controls->RegDst = 1; //0
 			controls->Jump = 0;
 			controls->Branch = 0;
 			controls->MemRead = 0;
 			controls->MemtoReg = 0;
-			controls->ALUOp = 0;
+			controls->ALUOp = 2; 
 			controls->MemWrite = 0;
-			controls->ALUSrc = 0;
-			controls->RegWrite = 0;
+			controls->ALUSrc = 0; // 1
+			controls->RegWrite = 0; // 1
 			break;
 
 			// sltiu
 		case 0b001011:
-			controls->RegDst = 1;
+			controls->RegDst = 1; // 0
 			controls->Jump = 0;
 			controls->Branch = 0;
 			controls->MemRead = 0;
 			controls->MemtoReg = 0;
-			controls->ALUOp = 0;
+			controls->ALUOp = 3; 
 			controls->MemWrite = 0;
 			controls->ALUSrc = 1;
 			controls->RegWrite = 1;
@@ -275,7 +275,7 @@ int instruction_decode(unsigned op, struct_controls *controls)
 
 			// beq
 		case 0b000100:
-			controls->RegDst = 1;
+			controls->RegDst = 1; //0
 			controls->Jump = 0;
 			controls->Branch = 1;
 			controls->MemRead = 0;
