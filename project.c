@@ -476,23 +476,22 @@ void write_register(unsigned r2, unsigned r3, unsigned memdata, unsigned ALUresu
 void PC_update(unsigned jsec, unsigned extended_value, char Branch, char Jump, char Zero, unsigned *PC)
 {
 		unsigned shift, upperFour, new;
-
+    *PC += 4;
 		// beq
   if(Branch == 1&& Zero==1){
-			*PC=(*PC+4)+(extended_value<<2)-128;
+			*PC=*PC+(extended_value<<2);
 			return;
 		}
 
 		// j
 		if(Jump == 1){
 			shift = jsec << 2;
-			upperFour = (*PC + 4) & 0xF0000000;
+			upperFour = *PC & 0xF0000000;
 			*PC = shift | upperFour;
 			return;
 		}
 
 		// next sequential instruction
-		*PC += 4;
 
   return;
 }
