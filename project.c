@@ -475,9 +475,8 @@ void PC_update(unsigned jsec, unsigned extended_value, char Branch, char Jump, c
 		unsigned shift, upperFour, new;
 
 		// beq
-		if(Branch == 1 && Zero == 1){
-			*PC += (extended_value << 2);
-			*PC += 4;
+  if(Branch == 1&& Zero==1){
+			*PC=(*PC+4)+(extended_value<<2)-128;
 			return;
 		}
 
