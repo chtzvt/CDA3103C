@@ -98,15 +98,45 @@ int instruction_fetch(unsigned PC, unsigned *Mem, unsigned *instruction)
 
 /* instruction partition */
 /* 10 Points */
-/*
+// Charlton Trezevant
 void
 instruction_partition(unsigned instruction, unsigned *op, unsigned *r1, unsigned *r2, unsigned *r3, unsigned *funct,
 					  unsigned *offset, unsigned *jsec)
 {
+	
+	// ---- INSTRUCTION TYPE, SIZE, AND FIELD REFERENCE ----
+	
+	// Instruction Format: R-type (arithmetic)
+	// Bit range:    31-26        25-21            20-16            15-11          10-5     5-0
+	// Labels:    | opcode | register 1 (rs) | register 2 (rt) | register 3 (rd) |offset | funct |
+	
+	// Instruction Format: I-type (transfer/branch/immediate)
+	// Bit range:    31-26        25-21            20-16                      15-0
+	// Labels:    | opcode | register 1 (rs) | register 2 (rt) | 16 bit addr or constant value   |
+	
+	// Instruction Format: J-type (jump)
+	// Bit range:    31-26                                 25-0
+	// Labels:    | opcode |                     target address (26 bits)                        |
 
+  // FIELD SIZES (in bits): | 6 | 5 | 5 | 5 | 5 | 6 |
+	
+	// For each field, we AND instruction with the appropriate bitmask for
+	// each field, then shift right the appropriate number of bits to get the
+	// individual field's value.
+
+	unsigned REG_MASK = 0x1F;
+	unsigned FUNCTION_FIELD_MASK = 0x3F;
+	unsigned OFFSET_MASK = 0x1F;
+	unsigned JUMP_MASK = 0x3FFFFFF;
+
+	*op = instruction >> 26;
+	*r1 = (instruction >> 21) & REG_MASK;
+	*r2 = (instruction >> 16) & REG_MASK;
+	*r3 = (instruction >> 11) & REG_MASK;
+	*funct = instruction & FUNCTION_FIELD_MASK;
+	*offset = instruction & OFFSET_MASK;
+	*jsec = instruction & JUMP_MASK;
 }
-*/
-
 
 /* Instruction Decode */
 /* 15 Points */
