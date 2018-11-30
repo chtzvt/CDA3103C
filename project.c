@@ -124,15 +124,18 @@ instruction_partition(unsigned instruction, unsigned *op, unsigned *r1, unsigned
 	// each field, then shift right the appropriate number of bits to get the
 	// individual field's value.
 
-	unsigned REG_MASK = 0x1F;
-	unsigned FUNCTION_FIELD_MASK = 0x3F;
-	unsigned OFFSET_MASK = 0x1F;
-	unsigned JUMP_MASK = 0x3FFFFFF;
+	unsigned OPCODE_MASK = 0xFC000000;
+	unsigned FUNCTION_FIELD_MASK = 0x0000003F;
+	unsigned OFFSET_MASK = 0x0000FFFF;
+	unsigned JUMP_MASK = 0x03FFFFFF;
+	unsigned REGISTER_1S_MASK = 0x03E00000;
+	unsigned REGISTER_2T_MASK = 0x001F0000;
+	unsigned REGISTER_3D_MASK = 0x0000F800;
 
-	*op = instruction >> 26;
-	*r1 = (instruction >> 21) & REG_MASK;
-	*r2 = (instruction >> 16) & REG_MASK;
-	*r3 = (instruction >> 11) & REG_MASK;
+	*op = instruction & OPCODE_MASK;
+	*r1 = (instruction & REGISTER_1S_MASK) >> 21;
+	*r2 = (instruction & REGISTER_2T_MASK) >> 16;
+	*r3 = (instruction & REGISTER_3D_MASK) >> 11;
 	*funct = instruction & FUNCTION_FIELD_MASK;
 	*offset = instruction & OFFSET_MASK;
 	*jsec = instruction & JUMP_MASK;
