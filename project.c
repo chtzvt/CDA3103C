@@ -102,10 +102,46 @@ void
 instruction_partition(unsigned instruction, unsigned *op, unsigned *r1, unsigned *r2, unsigned *r3, unsigned *funct,
 					  unsigned *offset, unsigned *jsec)
 {
+	
+	// ---- INSTRUCTION TYPE, SIZE, AND FIELD REFERENCE ----
+	
+	// Instruction Format: R-type (arithmetic)
+	// Bit range:    31-26        25-21            20-16            15-11          10-5     5-0
+	// Labels:    | opcode | register 1 (rs) | register 2 (rt) | register 3 (rd) |offset | funct |
+	
+	// Instruction Format: I-type (transfer/branch/immediate)
+	// Bit range:    31-26        25-21            20-16                      15-0
+	// Labels:    | opcode | register 1 (rs) | register 2 (rt) | 16 bit addr or constant value   |
+	
+	// Instruction Format: J-type (jump)
+	// Bit range:    31-26                                 25-0
+	// Labels:    | opcode |                     target address (26 bits)                        |
 
+  // FIELD SIZES (in bits): | 6 | 5 | 5 | 5 | 5 | 6 |
+	
+	// For each field, we AND instruction with the appropriate bitmask for
+	// each field, then shift right the appropriate number of bits to get the
+	// individual field's value.
+	
+	// For example, after ANDing our instruction with the OPCODE_MASK, we shift
+	// the resulting value over by 26 bits to get the opcode value.
+
+	unsigned OPCODE_MASK = 0xfc000000;
+	unsigned REG_1S_MASK = 0x03e00000;
+	unsigned REG_2T_MASK = 0x001f0000;
+	unsigned REG_3D_MASK = 0x0000f800;
+	unsigned FUNCTION_FIELD_MASK = 0x0000003f;
+	unsigned OFFSET_MASK = 0x0000ffff;
+	unsigned JUMP_MASK = 0x03ffffff;
+
+	*op = (instruction & OPCODE_MASK) >> 26;
+	*r1 = (instruction & REG_1S_MASK) >> 21;
+	*r2 = (instruction & REG_2T_MASK) >> 16;
+	*r3 = (instruction & REG_3D_MASK) >> 11;
+	*funct = instruction & FUNCTION_FIELD_MASK;
+	*offset = instruction & OFFSET_MASK;
+	*jsec = instruction & JUMP_MASK;
 }
-
-
 
 /* Instruction Decode */
 /* 15 Points */
